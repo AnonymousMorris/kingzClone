@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Your Game Title</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    #start-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    h1 {
+      font-size: 36px;
+      margin-bottom: 0px;
+    }
+    input {
+      padding: 10px 20px;
+      margin: 15px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #f00;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="start-container">
+    <h1>Kingz Knockoff</h1>
+    <input type="text" id="username-input" placeholder="Enter your username">
+    <button id="start-button">Start Game</button>
+  </div>
+
+  <script>
+    // Add JavaScript code here to handle button click and start the game
+    document.getElementById('start-button').addEventListener('click', function() {
+    var username = document.getElementById('username-input').value;
+    // Redirect the user to the game screen
+    window.location.href = 'game.html?username=' + encodeURIComponent(username);
+    });
+
+    document.getElementById('start-button').addEventListener('click', function() {
+      // Handle button click event, such as starting the game or navigating to the game screen
+      // You can add your game logic here
+      console.log('Game started!');
+    });
+  </script>
+</body>
+</html>

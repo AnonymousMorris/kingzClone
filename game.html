@@ -1,0 +1,186 @@
+
+<!DOCTYPE html> 
+<html>
+    <head>
+        <title>The Game Page</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <style>
+            html, body {
+              height: 100%;
+              width: 100%;
+              margin: 0;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            }
+            
+            #game-canvas {
+              border: 1px solid black;
+              background: url(/kingz/old-paper.jpeg) no-repeat center center fixed;
+              background-size: cover
+            }
+          </style>
+    </head>
+    <body>
+        <canvas id = "game-canvas"> </canvas>
+    </body>
+        
+    <script>
+        const canvas = document.getElementById('game-canvas');
+        const context = canvas.getContext('2d');
+        // canvas.width = window.innerWidth;
+        // canvas.height = window.innerHeight;
+        canvas.width = 1542;
+        canvas.height = 1028;
+        console.log(window.innerWidth);
+        console.log(window.innerHeight);
+        const numRows = 20;
+        const numCols = 20;
+        
+        // each cell of the grid will have player:{1 - 9}, with 0 signaling empty, and troops:{0 - inf}
+        const playerColors = ['empty', 'cloud', 'mountain', 'red', 'grey', 'green', 'purple', 'pink'];
+        //choose color later
+        // const selectedColors = [rgb(0,0,0), rgb(0, 0, 0) ]
+        let grid = [];
+        for(let i = 0; i < numRows; i++) {
+            grid[i] = [];
+            for(let ii = 0; ii < numCols; ii++) {
+                grid[i][ii] = {};
+            }
+        }
+
+        const cellSize = Math.floor(Math.min(canvas.width, canvas.height) / Math.max(numRows, numCols));
+        const gridWidth = cellSize * numCols;
+        const gridHeight = cellSize * numRows;
+        const xOffset = (canvas.width - gridWidth) / 2;
+        const yOffset = (canvas.height - gridHeight) / 2;
+        const fontsize = cellSize * 0.3;
+
+        const mountainImage = new Image;
+        const cloudImage = new Image;
+        const crownImage = new Image;
+
+        mountainImage.src = '/kingz/mountain.svg';
+        cloudImage.src = '/kingz/cloud.png';
+        crownImage.src = '/kingz/crown.png';
+
+        function renderGrid() {
+            for (let row = 0; row < numRows; row++) {
+                for (let col = 0; col < numCols; col++) {
+                    const x = xOffset + col * cellSize;
+                    const y = yOffset+ row * cellSize;
+
+                    // draw background
+                    // TODO: add code to draw background texture 
+                    context.strokeStyle = 'black';
+                    context.lineWidth = 1;
+                    context.strokeRect(x, y, cellSize, cellSize);
+
+                    let cell = grid[row][col];
+                    context.drawImage(mountainImage, x, y, cellSize, cellSize);
+
+                    // cell.type = 'mountain';
+                    // cell = "player";
+                    if(cell == "mountain") {
+                        // console.log("testing");
+                    } else if(cell == "player") {
+                        // context.strokeStyle = 'black';
+                        context.fillStyle = playerColors[cell.player];
+                        context.fillRect(x, y, cellSize, cellSize);
+
+                        // Draw number in cell
+                        const number = row * numCols + col;
+                        context.fillStyle = 'black';
+                        context.font = '${fontsize}px Arial';
+                        context.textAlign = 'center';
+                        context.textBaseline = 'middle';
+                        context.fillText(number.toString(), x + cellSize / 2, y + cellSize / 2);
+                    }
+                }
+            }
+            window.requestAnimationFrame(renderGrid);
+        }
+
+        // takes in x and y values relative to the canvas and returns which cell contains
+        function getCell(mouseX, mouseY) {
+            const x = mouseX - xOffset;
+            const y = mouseY - yOffset;
+
+            // Determine the row and column of the clicked cell
+            const clickedRow = Math.floor(y / cellSize);
+            const clickedCol = Math.floor(x / cellSize);
+
+            if(clickedRow < 0 || clickedRow >= numRows || clickedCol < 0 || clickedCol >= numCols) {
+                return {};
+            }
+
+            return {row:clickedRow, col:clickedCol}; 
+        }
+
+        function printMoves() {
+            for (const key in moves) {
+                if (moves.hasOwnProperty(key)) {
+                    const value = moves[key];
+                    console.log('Key:', key, 'Value:', value);
+                }
+            }
+        }
+
+        function addMove(x0, x1, x2, x3) {
+            moves
+        }
+
+        // Add click event listener to the canvas
+        canvas.addEventListener('mousemove', (event) => {
+            // check if primary button is down
+            while ((event.buttons & 1) == 1) {
+                const mouseX = event.offsetX;
+                const mouseY = event.offsetY;
+
+                const cell = getCell(mouseX, mouseY);
+
+                if(Object.keys(cell).length == 0) {
+                    break;
+                }
+
+                const pmouseX = mouseX - event.movementX;
+                const pmouseY = mouseY - event.movementY;
+
+                const pcell = getCell(pmouseX, pmouseY);
+
+                if(Object.keys(pcell).length == 0) {
+                    break;
+                }
+
+                // Handle the click event on the grid cell
+                console.log('Last cell:', pcell.row, pcell.col);
+                console.log('This cell:', cell.row, cell.col);
+
+                const difRow = Math.abs(pcell.row - cell.row);
+                const difCol = Math.abs(pcell.col - cell.col);
+                
+                if(difRow + difCol != 1) {
+                    break;
+                }
+
+
+
+                break;
+            }
+            // Retrieve the coordinates of the click relative to the canvas
+        });
+        
+        requestAnimationFrame(renderGrid);
+         // Call the renderGrid function to initialize the grid
+    </script>
+
+</html>
+
+<script>
+//     // Retrieve the username from the URL query parameter
+//     var urlParams = new URLSearchParams(window.location.search);
+//     var username = urlParams.get('username');
+// 
+//     // Use the username in your game logic or display it on the game screen
+//     console.log('Game started! Username:', username);
+</script>
